@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 
 static def releaseTime() {
     return new Date().format("yy.MMddHH", TimeZone.getTimeZone("GMT+8"))
@@ -13,21 +13,21 @@ def version = "2." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
-    signingConfigs {
-        myConfig {
-            storeFile file(RELEASE_STORE_FILE)
-            storePassword RELEASE_KEY_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_STORE_PASSWORD
-        }
-    }
+//    signingConfigs {
+//        myConfig {
+//            storeFile file(RELEASE_STORE_FILE)
+//            storePassword RELEASE_KEY_PASSWORD
+//            keyAlias RELEASE_KEY_ALIAS
+//            keyPassword RELEASE_STORE_PASSWORD
+//        }
+//    }
 
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 10000 + gitCommits
         versionName version
         project.ext.set("archivesBaseName", name + "_" + version)
@@ -40,12 +40,12 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.myConfig
+//            signingConfig signingConfigs.myConfig
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            signingConfig signingConfigs.myConfig
+//            signingConfig signingConfigs.myConfig
             applicationIdSuffix '.debug'
             versionNameSuffix 'debug'
             minifyEnabled false
@@ -78,8 +78,8 @@ dependencies {
     implementation "org.jetbrains.anko:anko-sdk27-listeners:$anko_version"
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:17.0.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+//    implementation 'com.google.firebase:firebase-core:17.0.1'
+//    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -89,7 +89,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.1.0-alpha08'
+    implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android:flexbox:1.1.0'
 
@@ -149,7 +149,7 @@ greendao {
     targetGenDir 'src/main/java'
 }
 
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
 repositories {
     mavenCentral()
 }

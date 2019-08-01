@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -20,8 +22,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ReadAdjustPop extends FrameLayout {
-    @BindView(R.id.vw_bg)
-    View vwBg;
     @BindView(R.id.hpb_light)
     SeekBar hpbLight;
     @BindView(R.id.scb_follow_sys)
@@ -32,14 +32,18 @@ public class ReadAdjustPop extends FrameLayout {
     LinearLayout llClick;
     @BindView(R.id.hpb_click)
     SeekBar hpbClick;
-    @BindView(R.id.ll_tts_SpeechRate)
-    LinearLayout llTtsSpeechRate;
     @BindView(R.id.hpb_tts_SpeechRate)
     SeekBar hpbTtsSpeechRate;
-    @BindView(R.id.scb_tts_follow_sys)
-    SmoothCheckBox scbTtsFollowSys;
+    @BindView(R.id.tv_tts_SpeechRate)
+    TextView tvTtsSpeechRate;
+    @BindView(R.id.hpb_tts_SpeechPitch)
+    SeekBar hpbTtsSpeechPitch;
+    @BindView(R.id.tv_tts_SpeechPitch)
+    TextView tvTtsSpeechPitch;
     @BindView(R.id.tv_auto_page)
     TextView tvAutoPage;
+    @BindView(R.id.rgSpeakerGroup)
+    RadioGroup rgSpeakerGroup;
 
     private Activity context;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -63,7 +67,6 @@ public class ReadAdjustPop extends FrameLayout {
     private void init(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_adjust, this);
         ButterKnife.bind(this, view);
-        vwBg.setOnClickListener(null);
     }
 
     public void setListener(Activity activity, Callback callback) {
@@ -79,16 +82,14 @@ public class ReadAdjustPop extends FrameLayout {
     }
 
     private void initData() {
-        scbTtsFollowSys.setChecked(readBookControl.isSpeechRateFollowSys());
-        if (readBookControl.isSpeechRateFollowSys()) {
-            hpbTtsSpeechRate.setEnabled(false);
-        } else {
-            hpbTtsSpeechRate.setEnabled(true);
-        }
         hpbClick.setMax(180);
         hpbClick.setProgress(readBookControl.getClickSensitivity());
         tvAutoPage.setText(String.format("%sS", readBookControl.getClickSensitivity()));
-        hpbTtsSpeechRate.setProgress(readBookControl.getSpeechRate() - 5);
+        hpbTtsSpeechRate.setProgress(readBookControl.getSpeechRate());
+        tvTtsSpeechRate.setText(String.format("%s", readBookControl.getSpeechRate()));
+        hpbTtsSpeechPitch.setProgress(readBookControl.getSpeechPitch());
+        tvTtsSpeechPitch.setText(String.format("%s", readBookControl.getSpeechPitch()));
+        ((RadioButton) rgSpeakerGroup.getChildAt(readBookControl.getSpeechSpeaker())).setChecked(true);
     }
 
     private void bindEvent() {
@@ -152,34 +153,10 @@ public class ReadAdjustPop extends FrameLayout {
         });
 
         //朗读语速调节
-        llTtsSpeechRate.setOnClickListener(v -> {
-            if (scbTtsFollowSys.isChecked()) {
-                scbTtsFollowSys.setChecked(false, true);
-            } else {
-                scbTtsFollowSys.setChecked(true, true);
-            }
-        });
-        scbTtsFollowSys.setOnCheckedChangeListener((checkBox, isChecked) -> {
-            if (isChecked) {
-                //跟随系统
-                hpbTtsSpeechRate.setEnabled(false);
-                readBookControl.setSpeechRateFollowSys(true);
-                if (callback != null) {
-                    callback.speechRateFollowSys();
-                }
-            } else {
-                //不跟随系统
-                hpbTtsSpeechRate.setEnabled(true);
-                readBookControl.setSpeechRateFollowSys(false);
-                if (callback != null) {
-                    callback.changeSpeechRate(readBookControl.getSpeechRate());
-                }
-            }
-        });
         hpbTtsSpeechRate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
+                tvTtsSpeechRate.setText(String.format("%s", i));
             }
 
             @Override
@@ -189,10 +166,44 @@ public class ReadAdjustPop extends FrameLayout {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                readBookControl.setSpeechRate(seekBar.getProgress() + 5);
+                readBookControl.setSpeechRate(seekBar.getProgress());
                 if (callback != null) {
                     callback.changeSpeechRate(readBookControl.getSpeechRate());
                 }
+            }
+        });
+
+        //朗读语速调节
+        hpbTtsSpeechPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                tvTtsSpeechPitch.setText(String.format("%s", i));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                readBookControl.setSpeechPitch(seekBar.getProgress());
+                if (callback != null) {
+                    callback.changeSpeechPitch(readBookControl.getSpeechPitch());
+                }
+            }
+        });
+
+        //朗读音色选择
+        rgSpeakerGroup.setOnCheckedChangeListener((radioGroup, i) -> {
+            View checkView = radioGroup.findViewById(i);
+            if (!checkView.isPressed()) {
+                return;
+            }
+            int idx = radioGroup.indexOfChild(checkView);
+            readBookControl.setSpeechSpeaker(idx);
+            if (callback != null) {
+                callback.changeSpeechSpeaker(readBookControl.getSpeechSpeaker());
             }
         });
     }
@@ -220,6 +231,10 @@ public class ReadAdjustPop extends FrameLayout {
 
     public interface Callback {
         void changeSpeechRate(int speechRate);
+
+        void changeSpeechPitch(int speechPitch);
+
+        void changeSpeechSpeaker(int speechSpeaker);
 
         void speechRateFollowSys();
     }

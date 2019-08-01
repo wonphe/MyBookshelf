@@ -631,6 +631,22 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
 
             @Override
+            public void changeSpeechPitch(int speechPitch) {
+                if (ReadAloudService.running) {
+                    ReadAloudService.pause(ReadBookActivity.this);
+                    ReadAloudService.resume(ReadBookActivity.this);
+                }
+            }
+
+            @Override
+            public void changeSpeechSpeaker(int speechSpeaker) {
+                if (ReadAloudService.running) {
+                    ReadAloudService.pause(ReadBookActivity.this);
+                    ReadAloudService.resume(ReadBookActivity.this);
+                }
+            }
+
+            @Override
             public void speechRateFollowSys() {
                 if (ReadAloudService.running) {
                     ReadAloudService.stop(ReadBookActivity.this);

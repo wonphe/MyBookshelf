@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -14,6 +15,7 @@ import android.provider.Settings;
 import android.util.DisplayMetrics;
 
 import top.ox16.yuedu.MApplication;
+import top.ox16.yuedu.R;
 import top.ox16.yuedu.utils.BitmapUtil;
 
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ public class ReadBookControl {
     private Bitmap bgBitmap;
     private int screenDirection;
     private int speechRate;
+    private int speechPitch;
+    private int speechSpeaker;
     private boolean speechRateFollowSys;
     private int textSize;
     private int textColor;
@@ -103,7 +107,9 @@ public class ReadBookControl {
         this.fontPath = preferences.getString("fontPath", null);
         this.textConvert = preferences.getInt("textConvertInt", 0);
         this.textBold = preferences.getBoolean("textBold", false);
-        this.speechRate = preferences.getInt("speechRate", 10);
+        this.speechRate = preferences.getInt("speechRate", 5);
+        this.speechPitch = preferences.getInt("speechPitch", 5);
+        this.speechSpeaker = preferences.getInt("speechSpeaker", 2);
         this.speechRateFollowSys = preferences.getBoolean("speechRateFollowSys", true);
         this.showTitle = preferences.getBoolean("showTitle", true);
         this.showTimeBattery = preferences.getBoolean("showTimeBattery", true);
@@ -138,8 +144,8 @@ public class ReadBookControl {
 
             Map<String, Integer> temp2 = new HashMap<>();
             temp2.put("textColor", Color.parseColor("#5E432E"));
-            temp2.put("bgIsColor", 1);
-            temp2.put("textBackground", Color.parseColor("#C6BAA1"));
+            temp2.put("bgIsColor", 0);
+            temp2.put("textBackground", R.drawable.theme_leather_bg);
             temp2.put("darkStatusIcon", 1);
             textDrawable.add(temp2);
 
@@ -196,6 +202,14 @@ public class ReadBookControl {
             bgIsColor = true;
             bgColor = getBgColor(textDrawableIndex);
             return;
+        }
+        if (textDrawableIndex == 1 && getBgCustom(textDrawableIndex) == 0) {
+            bgIsColor = false;
+            Resources resources = MApplication.getInstance().getResources();
+            bgBitmap = BitmapFactory.decodeResource(resources, R.drawable.theme_leather_bg);
+            if (bgBitmap != null) {
+                return;
+            }
         }
         bgIsColor = true;
         bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
@@ -521,6 +535,28 @@ public class ReadBookControl {
         this.speechRate = speechRate;
         preferences.edit()
                 .putInt("speechRate", speechRate)
+                .apply();
+    }
+
+    public int getSpeechPitch() {
+        return speechPitch;
+    }
+
+    public void setSpeechPitch(int speechPitch) {
+        this.speechPitch = speechPitch;
+        preferences.edit()
+                .putInt("speechPitch", speechPitch)
+                .apply();
+    }
+
+    public int getSpeechSpeaker() {
+        return speechSpeaker;
+    }
+
+    public void setSpeechSpeaker(int speechSpeaker) {
+        this.speechSpeaker = speechSpeaker;
+        preferences.edit()
+                .putInt("speechSpeaker", speechSpeaker)
                 .apply();
     }
 

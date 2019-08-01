@@ -446,4 +446,12 @@
     <string name="change_icon_summary">切换软件显示在桌面的图标</string>
     <string name="dsm_start"><![CDATA[<]]></string>
     <string name="dsm_end"><![CDATA[>]]></string>
+
+    <string name="read_aloud_pitch">朗读语调</string>
+    <string name="read_aloud_speaker">阅读音色</string>
+    <string name="aloud_speaker_0">普通女</string>
+    <string name="aloud_speaker_1">普通男</string>
+    <string name="aloud_speaker_2">特别男</string>
+    <string name="aloud_speaker_3">情感男</string>
+    <string name="aloud_speaker_4">萌萌女</string>
 </resources>

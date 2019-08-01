@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kunfei.bookshelf.widget.views.ATETextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<top.ox16.yuedu.widget.views.ATETextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/textInputLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.kunfei.bookshelf.widget.views.ATEEditText
+    <top.ox16.yuedu.widget.views.ATEEditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-</com.kunfei.bookshelf.widget.views.ATETextInputLayout>
+</top.ox16.yuedu.widget.views.ATETextInputLayout>

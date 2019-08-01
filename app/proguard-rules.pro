@@ -182,8 +182,8 @@ public static java.lang.String TABLENAME;
 -keep class okio.**{*;}
 -keep class com.hwangjr.rxbus.**{*;}
 -keep class org.conscrypt.**{*;}
--keep class com.kunfei.bookshelf.widget.**{*;}
--keep class com.kunfei.bookshelf.bean.**{*;}
+-keep class top.ox16.yuedu.widget.**{*;}
+-keep class top.ox16.yuedu.bean.**{*;}
 -keep class android.support.**{*;}
 -keep class me.grantland.widget.**{*;}
 -keep class de.hdodenhof.circleimageview.**{*;}
@@ -193,7 +193,7 @@ public static java.lang.String TABLENAME;
 -keep class com.gyf.barlibrary.* {*;}
 ##JSOUP
 -keep class org.jsoup.**{*;}
--keep class com.monke.mprogressbar.**{ *;}
+-keep class top.ox16.mprogressbar.**{ *;}
 
 -keep class org.slf4j.**{*;}
 -dontwarn org.slf4j.**
@@ -233,7 +233,7 @@ public static java.lang.String TABLENAME;
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);
 }
--keep public class com.kunfei.bookshelf.R$*{
+-keep public class top.ox16.yuedu.R$*{
     public static final int *;
 }
 -keepclassmembers enum * {

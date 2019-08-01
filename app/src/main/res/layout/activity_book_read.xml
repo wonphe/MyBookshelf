@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <!--阅读页面-->
-    <com.kunfei.bookshelf.widget.page.PageView
+    <top.ox16.yuedu.widget.page.PageView
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,14 +32,14 @@
         android:src="@drawable/ic_cursor_right"
         android:visibility="invisible" />
 
-    <com.kunfei.bookshelf.view.popupwindow.ReadLongPressPop
+    <top.ox16.yuedu.view.popupwindow.ReadLongPressPop
         android:id="@+id/readLongPress"
         android:layout_width="120dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:visibility="invisible" />
 
-    <com.kunfei.bookshelf.view.popupwindow.MediaPlayerPop
+    <top.ox16.yuedu.view.popupwindow.MediaPlayerPop
         android:id="@+id/mediaPlayerPop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -132,28 +132,28 @@
             <View style="@style/Style.Shadow.Top" />
         </LinearLayout>
 
-        <com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu
+        <top.ox16.yuedu.view.popupwindow.ReadBottomMenu
             android:id="@+id/read_menu_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="invisible" />
 
-        <com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop
+        <top.ox16.yuedu.view.popupwindow.ReadAdjustPop
             android:id="@+id/readAdjustPop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="invisible" />
 
-        <com.kunfei.bookshelf.view.popupwindow.ReadInterfacePop
+        <top.ox16.yuedu.view.popupwindow.ReadInterfacePop
             android:id="@+id/readInterfacePop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="invisible" />
 
-        <com.kunfei.bookshelf.view.popupwindow.MoreSettingPop
+        <top.ox16.yuedu.view.popupwindow.MoreSettingPop
             android:id="@+id/moreSettingPop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

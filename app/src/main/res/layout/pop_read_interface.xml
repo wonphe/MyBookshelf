@@ -33,7 +33,7 @@
                 android:paddingRight="15dp"
                 android:paddingBottom="5dp">
 
-                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                <top.ox16.yuedu.widget.views.ATEStrokeTextView
                     android:id="@+id/fl_text_Bold"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -48,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                <top.ox16.yuedu.widget.views.ATEStrokeTextView
                     android:id="@+id/fl_text_font"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -63,7 +63,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                <top.ox16.yuedu.widget.views.ATEStrokeTextView
                     android:id="@+id/fl_indent"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -78,7 +78,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+                <top.ox16.yuedu.widget.views.ATEStrokeTextView
                     android:id="@+id/tvPageMode"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -112,7 +112,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/text_size" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbTextSize"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -126,7 +126,7 @@
                     android:text="@string/text_letter_spacing"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbLetterSpacing"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -140,7 +140,7 @@
                     android:text="@string/line_size"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbLineSize"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -154,7 +154,7 @@
                     android:text="@string/paragraph_size"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbParagraphSize"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -189,7 +189,7 @@
                     android:gravity="center"
                     android:text="@string/top" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbPaddingTop"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -203,7 +203,7 @@
                     android:text="@string/bottom"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbPaddingBottom"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -217,7 +217,7 @@
                     android:text="@string/left"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbPaddingLeft"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -231,7 +231,7 @@
                     android:text="@string/right"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbPaddingRight"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -261,7 +261,7 @@
                     android:gravity="center"
                     android:text="@string/top" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbTipPaddingTop"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -275,7 +275,7 @@
                     android:text="@string/bottom"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbTipPaddingBottom"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -289,7 +289,7 @@
                     android:text="@string/left"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbTipPaddingLeft"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -303,7 +303,7 @@
                     android:text="@string/right"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.widget.number.NumberButton
+                <top.ox16.yuedu.widget.number.NumberButton
                     android:id="@+id/nbTipPaddingRight"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

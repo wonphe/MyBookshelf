@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kunfei.bookshelf.view.activity.ReadStyleActivity">
+    tools:context="top.ox16.yuedu.view.activity.ReadStyleActivity">
 
     <LinearLayout
         android:id="@+id/ll_content"
@@ -38,7 +38,7 @@
             android:orientation="horizontal"
             android:padding="6dp">
 
-            <com.kunfei.bookshelf.widget.views.ATESwitch
+            <top.ox16.yuedu.widget.views.ATESwitch
                 android:id="@+id/sw_darkStatusIcon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:orientation="horizontal"
             android:padding="6dp">
 
-            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+            <top.ox16.yuedu.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+            <top.ox16.yuedu.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectBgColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+            <top.ox16.yuedu.widget.views.ATEStrokeTextView
                 android:id="@+id/tvSelectBgImage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <com.kunfei.bookshelf.widget.views.ATEStrokeTextView
+            <top.ox16.yuedu.widget.views.ATEStrokeTextView
                 android:id="@+id/tvDefault"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

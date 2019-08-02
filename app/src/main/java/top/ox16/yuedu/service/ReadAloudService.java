@@ -604,7 +604,7 @@ public class ReadAloudService extends Service {
     protected Map<String, String> getParams() {
         Map<String, String> params = new HashMap<>();
         // 以下参数均为选填
-        String speaker = String.valueOf(readBookControl.getSpeechSpeaker());
+        String speaker = mapSpeakerByRadioIndex(readBookControl.getSpeechSpeaker());
         // 设置在线发声音人： 0 普通女声（默认） 1 普通男声 2 特别男声 3 情感男声<度逍遥> 4 情感儿童声<度丫丫>
         params.put(SpeechSynthesizer.PARAM_SPEAKER, speaker);
         // 设置合成的音量，0-15 ，默认 5
@@ -630,13 +630,13 @@ public class ReadAloudService extends Service {
             case "1":
                 offlineVoice = OfflineResource.VOICE_MALE;
                 break;
-            case "2":
-                offlineVoice = OfflineResource.VOICE_DUXY;
-                break;
             case "3":
+            case "106":
                 offlineVoice = OfflineResource.VOICE_DUXY;
                 break;
             case "4":
+            case "110":
+            case "103":
                 offlineVoice = OfflineResource.VOICE_DUYY;
                 break;
             default:
@@ -651,6 +651,43 @@ public class ReadAloudService extends Service {
         params.put(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE,
                 offlineResource.getModelFilename());
         return params;
+    }
+
+    private String mapSpeakerByRadioIndex(int index) {
+        String speaker;
+        switch (index) {
+            case 0:
+                speaker = "0";
+                break;
+            case 1:
+                speaker = "1";
+                break;
+            case 2:
+                speaker = "3";
+                break;
+            case 3:
+                speaker = "4";
+                break;
+            case 4:
+                speaker = "106";
+                break;
+            case 5:
+                speaker = "110";
+                break;
+            case 6:
+                speaker = "111";
+                break;
+            case 7:
+                speaker = "103";
+                break;
+            case 8:
+                speaker = "5";
+                break;
+            default:
+                speaker = "0";
+                break;
+        }
+        return speaker;
     }
 
     protected OfflineResource createOfflineResource(String voiceType) {

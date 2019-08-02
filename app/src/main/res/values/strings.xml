@@ -449,9 +449,13 @@
 
     <string name="read_aloud_pitch">朗读语调</string>
     <string name="read_aloud_speaker">阅读音色</string>
-    <string name="aloud_speaker_0">普通女</string>
-    <string name="aloud_speaker_1">普通男</string>
-    <string name="aloud_speaker_2">特别男</string>
-    <string name="aloud_speaker_3">情感男</string>
-    <string name="aloud_speaker_4">萌萌女</string>
+    <string name="aloud_speaker_0">小美</string>
+    <string name="aloud_speaker_1">小宇</string>
+    <string name="aloud_speaker_3">逍遥</string>
+    <string name="aloud_speaker_4">丫丫</string>
+    <string name="aloud_speaker_106">博文</string>
+    <string name="aloud_speaker_110">小童</string>
+    <string name="aloud_speaker_111">小萌</string>
+    <string name="aloud_speaker_103">米朵</string>
+    <string name="aloud_speaker_5">小娇</string>
 </resources>

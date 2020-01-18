@@ -155,7 +155,7 @@ public class AnalyzeRule {
         return getStringList(ruleList, isUrl);
     }
 
-    @SuppressWarnings({"unchecked", "ConstantConditions"})
+    @SuppressWarnings({"unchecked"})
     public List<String> getStringList(List<SourceRule> ruleList, boolean isUrl) throws Exception {
         Object result = null;
         if (!ruleList.isEmpty()) result = object;

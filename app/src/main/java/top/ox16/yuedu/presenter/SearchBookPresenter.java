@@ -11,8 +11,10 @@ import com.hwangjr.rxbus.thread.EventThread;
 import top.ox16.basemvplib.BasePresenterImpl;
 import top.ox16.basemvplib.impl.IView;
 import top.ox16.yuedu.DbHelper;
+import top.ox16.yuedu.MApplication;
 import top.ox16.yuedu.base.observer.MyObserver;
 import top.ox16.yuedu.bean.BookShelfBean;
+import top.ox16.yuedu.bean.BookSourceBean;
 import top.ox16.yuedu.bean.SearchBookBean;
 import top.ox16.yuedu.bean.SearchHistoryBean;
 import top.ox16.yuedu.constant.RxBusTag;
@@ -90,7 +92,16 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
         };
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel(onSearchListener);
+        if (MApplication.SEARCH_GROUP != null) {
+            List<BookSourceBean> sourceBeanList = BookSourceManager.getEnableSourceByGroup(MApplication.SEARCH_GROUP);
+            if (sourceBeanList.size() > 0) {
+                searchBookModel = new SearchBookModel(onSearchListener, sourceBeanList);
+            } else {
+                searchBookModel = new SearchBookModel(onSearchListener);
+            }
+        } else {
+            searchBookModel = new SearchBookModel(onSearchListener);
+        }
     }
 
     /**

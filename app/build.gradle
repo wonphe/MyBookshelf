@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'org.greenrobot.greendao'
 //apply plugin: 'io.fabric'
+apply plugin: "de.timfreiheit.resourceplaceholders"
 
 static def releaseTime() {
     return new Date().format("yy.MMddHH", TimeZone.getTimeZone("GMT+8"))
@@ -70,6 +71,10 @@ android {
 
 }
 
+resourcePlaceholders {
+    files = ['xml/shortcuts.xml']
+}
+
 dependencies {
     testImplementation 'junit:junit:4.13-beta-3'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -77,8 +82,8 @@ dependencies {
     //    implementation project(':basemvplib')
 
     //support
-    api 'androidx.core:core:1.2.0-alpha02'
-    api 'androidx.appcompat:appcompat:1.1.0-rc01'
+    api 'androidx.core:core:1.2.0-rc01'
+    api 'androidx.appcompat:appcompat:1.2.0-alpha01'
 
     //RxAndroid
     api 'io.reactivex.rxjava2:rxjava:2.2.10'
@@ -88,10 +93,10 @@ dependencies {
     api 'com.hwangjr.rxbus:rxbus:2.0.1'
 
     //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.6.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
-    api 'com.squareup.retrofit2:converter-scalars:2.6.0'
-    api 'androidx.core:core-ktx:1.2.0-alpha02'
+    api 'com.squareup.retrofit2:retrofit:2.6.1'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+    api 'com.squareup.retrofit2:converter-scalars:2.6.1'
+    api 'androidx.core:core-ktx:1.2.0-rc01'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //anko
@@ -107,13 +112,13 @@ dependencies {
 
     //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.media:media:1.1.0-rc01'
+    implementation 'androidx.media:media:1.2.0-alpha01'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //google
-    implementation 'com.google.android.material:material:1.1.0-alpha09'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android:flexbox:1.1.0'
 

@@ -1,5 +1,7 @@
 package top.ox16.yuedu.help;
 
+import android.text.TextUtils;
+
 import top.ox16.yuedu.MApplication;
 import top.ox16.yuedu.utils.StringUtils;
 import top.ox16.yuedu.utils.web_dav.http.HttpAuth;
@@ -10,6 +12,7 @@ public class WebDavHelp {
 
     public static String getWebDavUrl() {
         String url = MApplication.getConfigPreferences().getString("web_dav_url", DEFAULT_WEB_DAV_URL);
+        if (TextUtils.isEmpty(url)) url = DEFAULT_WEB_DAV_URL;
         assert url != null;
         if (!url.endsWith("/")) {
             url = url + "/";

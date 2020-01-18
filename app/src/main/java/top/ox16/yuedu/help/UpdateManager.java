@@ -21,7 +21,6 @@ import top.ox16.yuedu.base.observer.MyObserver;
 import top.ox16.yuedu.bean.UpdateInfoBean;
 import top.ox16.yuedu.model.analyzeRule.AnalyzeHeaders;
 import top.ox16.yuedu.model.impl.IHttpGetApi;
-import top.ox16.yuedu.view.activity.UpdateActivity;
 
 import java.io.File;
 
@@ -53,10 +52,10 @@ public class UpdateManager {
                     @Override
                     public void onNext(UpdateInfoBean updateInfo) {
                         if (updateInfo.getUpDate()) {
-                            UpdateActivity.startThis(activity, updateInfo);
+
                         } else if (showMsg) {
                             Toast.makeText(activity, "已是最新版本", Toast.LENGTH_SHORT).show();
-                            UpdateActivity.startThis(activity, updateInfo);
+
                         }
                     }
 

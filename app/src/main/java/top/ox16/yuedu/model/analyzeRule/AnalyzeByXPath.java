@@ -178,17 +178,17 @@ public class AnalyzeByXPath {
             if (jxNodes == null) return null;
             return TextUtils.join(",", jxNodes);
         } else {
-            StringBuilder sb = new StringBuilder();
+            List<String> textS = new ArrayList<>();
             for (String rl : rules) {
                 String temp = getString(rl);
                 if (!TextUtils.isEmpty(temp)) {
-                    sb.append(temp);
+                    textS.add(temp);
                     if (elementsType.equals("|")) {
                         break;
                     }
                 }
             }
-            return sb.toString();
+            return TextUtils.join(",", textS).trim();
         }
     }
 }

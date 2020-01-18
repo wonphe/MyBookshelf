@@ -95,19 +95,19 @@ public class DonateActivity extends MBaseActivity {
                 toast(R.string.copy_complete);
             }
         });
-        vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://wonphe.github.io/YueDu/zfbhbrwm.jpg"));
-        vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://wonphe.github.io/YueDu/zfbskrwm.jpg"));
-        vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://wonphe.github.io/YueDu/wxskrwm.png"));
-        vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://wonphe.github.io/YueDu/qqskrwm.png"));
+        vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbhbrwm.png"));
+        vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbskrwm.jpg"));
+        vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/wxskrwm.jpg"));
+        vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/qqskrwm.jpg"));
         vwZfbHbSsm.setOnClickListener(view -> getZfbHb(this));
     }
 
     public static void getZfbHb(Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText(null, "519544015");
+        ClipData clipData = ClipData.newPlainText(null, "537954522");
         if (clipboard != null) {
             clipboard.setPrimaryClip(clipData);
-            Toast.makeText(context, "高级功能已开启\n红包码已复制\n支付宝首页搜索“519544015” 立即领红包", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "高级功能已开启\n红包码已复制\n支付宝首页搜索“537954522” 立即领红包", Toast.LENGTH_LONG).show();
         }
         try {
             PackageManager packageManager = context.getApplicationContext().getPackageManager();

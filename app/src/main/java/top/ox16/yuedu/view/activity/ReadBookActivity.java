@@ -642,17 +642,33 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void initReadAdjustPop() {
         readAdjustPop.setListener(this, new ReadAdjustPop.Callback() {
             @Override
-            public void speechRateFollowSys() {
-                if (ReadAloudService.running) {
-                    ReadAloudService.stop(ReadBookActivity.this);
-                }
-            }
-
-            @Override
             public void changeSpeechRate(int speechRate) {
                 if (ReadAloudService.running) {
                     ReadAloudService.pause(ReadBookActivity.this);
                     ReadAloudService.resume(ReadBookActivity.this);
+                }
+            }
+
+            @Override
+            public void changeSpeechPitch(int speechPitch) {
+                if (ReadAloudService.running) {
+                    ReadAloudService.pause(ReadBookActivity.this);
+                    ReadAloudService.resume(ReadBookActivity.this);
+                }
+            }
+
+            @Override
+            public void changeSpeechSpeaker(int speechSpeaker) {
+                if (ReadAloudService.running) {
+                    ReadAloudService.pause(ReadBookActivity.this);
+                    ReadAloudService.resume(ReadBookActivity.this);
+                }
+            }
+
+            @Override
+            public void speechRateFollowSys() {
+                if (ReadAloudService.running) {
+                    ReadAloudService.stop(ReadBookActivity.this);
                 }
             }
         });

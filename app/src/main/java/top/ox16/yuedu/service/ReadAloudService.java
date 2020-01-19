@@ -25,17 +25,29 @@ import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.baidu.tts.chainofresponsibility.logger.LoggerProxy;
+import com.baidu.tts.client.SpeechError;
+import com.baidu.tts.client.SpeechSynthesizer;
+import com.baidu.tts.client.SpeechSynthesizerListener;
+import com.baidu.tts.client.TtsMode;
 import com.hwangjr.rxbus.RxBus;
+
+import top.ox16.yuedu.BuildConfig;
 import top.ox16.yuedu.MApplication;
 import top.ox16.yuedu.R;
+import top.ox16.yuedu.baidutts.control.InitConfig;
+import top.ox16.yuedu.baidutts.control.MySyntherizer;
+import top.ox16.yuedu.baidutts.util.OfflineResource;
 import top.ox16.yuedu.constant.RxBusTag;
 import top.ox16.yuedu.help.MediaManager;
+import top.ox16.yuedu.help.ReadBookControl;
 import top.ox16.yuedu.view.activity.ReadBookActivity;
 
 import java.io.IOException;
@@ -43,6 +55,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
 import static top.ox16.yuedu.constant.AppConstant.ActionDoneService;
@@ -74,9 +87,6 @@ public class ReadAloudService extends Service {
             | PlaybackStateCompat.ACTION_STOP
             | PlaybackStateCompat.ACTION_SEEK_TO;
     public static Boolean running = false;
-    private TextToSpeech textToSpeech;
-    private TextToSpeech textToSpeech_ui;
-    private HashMap mParams;
     private Boolean ttsInitSuccess = false;
     private Boolean speak = true;
     private Boolean pause = false;
@@ -90,7 +100,6 @@ public class ReadAloudService extends Service {
     private AudioFocusRequest mFocusRequest;
     private BroadcastReceiver broadcastReceiver;
     private SharedPreferences preference;
-    private int speechRate;
     private String title;
     private String text;
     private boolean fadeTts;
@@ -104,6 +113,9 @@ public class ReadAloudService extends Service {
     private MediaPlayer mediaPlayer;
     private String audioUrl;
     private int progress;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
+    private MySyntherizer synthesizer;
+    private OfflineResource offlineResource;
 
     /**
      * 朗读
@@ -192,6 +204,7 @@ public class ReadAloudService extends Service {
         super.onCreate();
         running = true;
         preference = MApplication.getConfigPreferences();
+        initTTS();
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mediaManager = MediaManager.getInstance();
@@ -251,14 +264,13 @@ public class ReadAloudService extends Service {
                         break;
                     case ActionUITimerStop:
                         sText = getString(R.string.read_aloud_timerstop);
-                        textToSpeech_ui.speak(sText,TextToSpeech.QUEUE_FLUSH, mParams);
+//                        textToSpeech_ui.speak(sText, TextToSpeech.QUEUE_FLUSH, mParams);
                         break;
                     case ActionUITimerRemaining:
                         if (timeMinute > 0 && timeMinute <= maxTimeMinute) {
-                            if (timeMinute<=60) {
+                            if (timeMinute <= 60) {
                                 sText = getString(R.string.read_aloud_timerremaining, timeMinute);
-                            }
-                            else {
+                            } else {
                                 int hours = timeMinute / 60;
                                 int minutes = timeMinute % 60;
                                 sText = getString(R.string.read_aloud_timerremaininglong, hours, minutes);
@@ -267,7 +279,7 @@ public class ReadAloudService extends Service {
                             sText = getString(R.string.read_aloud_timerstop);
                         }
                         pauseReadAloud(false);
-                        textToSpeech_ui.speak(sText,TextToSpeech.QUEUE_FLUSH, mParams);
+//                        textToSpeech_ui.speak(sText, TextToSpeech.QUEUE_FLUSH, mParams);
                         resumeReadAloud();
                         break;
                 }
@@ -289,14 +301,24 @@ public class ReadAloudService extends Service {
     }
 
     private void initTTS() {
-        if (textToSpeech == null)
-            textToSpeech = new TextToSpeech(this, new TTSListener());
-        if (textToSpeech_ui == null)
-            textToSpeech_ui = new TextToSpeech(this, new TTSUIListener());
-        if (mParams == null) {
-            mParams = new HashMap();
-            mParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, "3");
-        }
+        LoggerProxy.printable(false); // 日志打印在logcat中
+        // 设置初始化参数
+        // 此处可以改为 含有您业务逻辑的SpeechSynthesizerListener的实现类
+        SpeechSynthesizerListener listener = new SpeechSyncListener();
+
+        Map<String, String> params = getParams();
+
+        String appId = BuildConfig.APP_ID;
+        String appKey = BuildConfig.APP_KEY;
+        String secretKey = BuildConfig.SECRET_KEY;
+
+        // TtsMode.MIX; 离在线融合，在线优先； TtsMode.ONLINE 纯在线； 没有纯离线
+        TtsMode ttsMode = TtsMode.MIX;
+        // appId appKey secretKey 网站上您申请的应用获取。注意使用离线合成功能的话，需要应用中填写您app的包名。包名在build.gradle中获取。
+        InitConfig initConfig = new InitConfig(appId, appKey, secretKey, ttsMode, params, listener);
+        ttsInitSuccess = true;
+
+        synthesizer = new MySyntherizer(this, initConfig, mainHandler);
     }
 
     private void initMediaPlayer() {
@@ -330,6 +352,8 @@ public class ReadAloudService extends Service {
             stopSelf();
             return;
         }
+        synthesizer.setParams(getParams());
+        synthesizer.loadModel(offlineResource.getModelFilename(), offlineResource.getTextFilename());
         this.text = text;
         this.title = title;
         this.progress = progress;
@@ -341,15 +365,15 @@ public class ReadAloudService extends Service {
             initMediaPlayer();
             audioUrl = content;
         } else {
-            initTTS();
             String[] splitSpeech = content.split("\n");
             for (String aSplitSpeech : splitSpeech) {
-                if (!isEmpty(aSplitSpeech)) {
+                if (!isEmpty(aSplitSpeech.trim())) {
                     contentList.add(aSplitSpeech);
                 }
             }
         }
         if (aloudButton || speak) {
+            synthesizer.stop();
             speak = false;
             pause = false;
             playTTS();
@@ -385,43 +409,9 @@ public class ReadAloudService extends Service {
             speak = !speak;
             RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PLAY);
             updateNotification();
-            initSpeechRate();
-            HashMap<String, String> map = new HashMap<>();
-            map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "content");
             for (int i = nowSpeak; i < contentList.size(); i++) {
-                if (i == 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        textToSpeech.speak(contentList.get(i), TextToSpeech.QUEUE_FLUSH, null, "content");
-                    } else {
-                        textToSpeech.speak(contentList.get(i), TextToSpeech.QUEUE_FLUSH, map);
-                    }
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        textToSpeech.speak(contentList.get(i), TextToSpeech.QUEUE_ADD, null, "content");
-                    } else {
-                        textToSpeech.speak(contentList.get(i), TextToSpeech.QUEUE_ADD, map);
-                    }
-                }
+                synthesizer.speak(contentList.get(i), String.valueOf(i));
             }
-        }
-    }
-
-    public void toTTSSetting() {
-        //跳转到文字转语音设置界面
-        try {
-            Intent intent = new Intent();
-            intent.setAction("com.android.settings.TTS_SETTINGS");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } catch (Exception ignored) {
-        }
-    }
-
-    private void initSpeechRate() {
-        if (speechRate != preference.getInt("speechRate", 10) && !preference.getBoolean("speechRateFollowSys", true)) {
-            speechRate = preference.getInt("speechRate", 10);
-            float speechRateF = (float) speechRate / 10;
-            textToSpeech.setSpeechRate(speechRateF);
         }
     }
 
@@ -439,9 +429,9 @@ public class ReadAloudService extends Service {
         } else {
             if (fadeTts) {
                 AsyncTask.execute(() -> mediaManager.fadeOutVolume());
-                handler.postDelayed(() -> textToSpeech.stop(), 300);
+                handler.postDelayed(() -> synthesizer.stop(), 300);
             } else {
-                textToSpeech.stop();
+                synthesizer.stop();
             }
         }
         RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PAUSE);
@@ -451,6 +441,8 @@ public class ReadAloudService extends Service {
      * 恢复朗读
      */
     private void resumeReadAloud() {
+        synthesizer.setParams(getParams());
+        synthesizer.loadModel(offlineResource.getModelFilename(), offlineResource.getTextFilename());
         updateTimer(0);
         pause = false;
         updateNotification();
@@ -464,7 +456,7 @@ public class ReadAloudService extends Service {
     }
 
     private void updateTimer(int minute) {
-        if (10==minute) {
+        if (10 == minute) {
             if (timeMinute < 30) {
                 timeMinute = timeMinute + minute;
             } else if (timeMinute < 120) {
@@ -523,10 +515,9 @@ public class ReadAloudService extends Service {
         if (pause) {
             nTitle = getString(R.string.read_aloud_pause);
         } else if (timeMinute > 0 && timeMinute <= maxTimeMinute) {
-            if (timeMinute<=60) {
+            if (timeMinute <= 60) {
                 nTitle = getString(R.string.read_aloud_timer, timeMinute);
-            }
-            else {
+            } else {
                 int hours = timeMinute / 60;
                 int minutes = timeMinute % 60;
                 nTitle = getString(R.string.read_aloud_timerlong, hours, minutes);
@@ -575,18 +566,13 @@ public class ReadAloudService extends Service {
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        if (textToSpeech != null) {
+        if (synthesizer != null) {
             if (fadeTts) {
                 AsyncTask.execute(() -> mediaManager.fadeOutVolume());
             }
-            textToSpeech.stop();
-            textToSpeech.shutdown();
-            textToSpeech = null;
-        }
-        if (textToSpeech_ui != null) {
-            textToSpeech_ui.stop();
-            textToSpeech_ui.shutdown();
-            textToSpeech_ui = null;
+            synthesizer.stop();
+            synthesizer.release();
+            synthesizer = null;
         }
     }
 
@@ -671,44 +657,174 @@ public class ReadAloudService extends Service {
                         .build());
     }
 
-    private final class TTSListener implements TextToSpeech.OnInitListener {
-        @Override
-        public void onInit(int i) {
-            if (i == TextToSpeech.SUCCESS) {
-                textToSpeech.setLanguage(Locale.CHINA);
-                textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
-                ttsInitSuccess = true;
-                playTTS();
-            } else {
-                mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_init_failed), Toast.LENGTH_SHORT).show());
-                ReadAloudService.this.stopSelf();
-            }
+    /**
+     * 合成的参数，可以初始化时填写，也可以在合成前设置。
+     */
+    protected Map<String, String> getParams() {
+        Map<String, String> params = new HashMap<>();
+        // 以下参数均为选填
+        String speaker = mapSpeakerByRadioIndex(readBookControl.getSpeechSpeaker());
+        // 设置在线发声音人： 0 普通女声（默认） 1 普通男声 2 特别男声 3 情感男声<度逍遥> 4 情感儿童声<度丫丫>
+        params.put(SpeechSynthesizer.PARAM_SPEAKER, speaker);
+        // 设置合成的音量，0-15 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_VOLUME, "15");
+        // 设置合成的语速，0-15 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_SPEED, String.valueOf(readBookControl.getSpeechRate()));
+        // 设置合成的语调，0-15 ，默认 5
+        params.put(SpeechSynthesizer.PARAM_PITCH, String.valueOf(readBookControl.getSpeechPitch()));
+
+        params.put(SpeechSynthesizer.PARAM_MIX_MODE, SpeechSynthesizer.MIX_MODE_DEFAULT);
+        // 该参数设置为TtsMode.MIX生效。即纯在线模式不生效。
+        // MIX_MODE_DEFAULT 默认 ，wifi状态下使用在线，非wifi离线。在线状态下，请求超时6s自动转离线
+        // MIX_MODE_HIGH_SPEED_SYNTHESIZE_WIFI wifi状态下使用在线，非wifi离线。在线状态下， 请求超时1.2s自动转离线
+        // MIX_MODE_HIGH_SPEED_NETWORK ， 3G 4G wifi状态下使用在线，其它状态离线。在线状态下，请求超时1.2s自动转离线
+        // MIX_MODE_HIGH_SPEED_SYNTHESIZE, 2G 3G 4G wifi状态下使用在线，其它状态离线。在线状态下，请求超时1.2s自动转离线
+
+        // 离线发音选择，VOICE_FEMALE即为离线女声发音。
+        String offlineVoice;
+        switch (speaker) {
+            case "0":
+                offlineVoice = OfflineResource.VOICE_FEMALE;
+                break;
+            case "1":
+                offlineVoice = OfflineResource.VOICE_MALE;
+                break;
+            case "3":
+            case "106":
+                offlineVoice = OfflineResource.VOICE_DUXY;
+                break;
+            case "4":
+            case "110":
+            case "103":
+                offlineVoice = OfflineResource.VOICE_DUYY;
+                break;
+            default:
+                offlineVoice = OfflineResource.VOICE_FEMALE;
+                break;
         }
+
+        // 离线资源文件， 从assets目录中复制到临时目录，需要在initTTs方法前完成
+        offlineResource = createOfflineResource(offlineVoice);
+        // 声学模型文件路径 (离线引擎使用), 请确认下面两个文件存在
+        params.put(SpeechSynthesizer.PARAM_TTS_TEXT_MODEL_FILE, offlineResource.getTextFilename());
+        params.put(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE,
+                offlineResource.getModelFilename());
+        return params;
     }
 
-    private final class TTSUIListener implements TextToSpeech.OnInitListener {
-        @Override
-        public void onInit(int i) {
-            if (i == TextToSpeech.SUCCESS) {
-                textToSpeech_ui.setLanguage(Locale.CHINA);
-            }
+    private String mapSpeakerByRadioIndex(int index) {
+        String speaker;
+        switch (index) {
+            case 0:
+                speaker = "0";
+                break;
+            case 1:
+                speaker = "1";
+                break;
+            case 2:
+                speaker = "3";
+                break;
+            case 3:
+                speaker = "4";
+                break;
+            case 4:
+                speaker = "106";
+                break;
+            case 5:
+                speaker = "110";
+                break;
+            case 6:
+                speaker = "111";
+                break;
+            case 7:
+                speaker = "103";
+                break;
+            case 8:
+                speaker = "5";
+                break;
+            default:
+                speaker = "0";
+                break;
         }
+        return speaker;
+    }
+
+    protected OfflineResource createOfflineResource(String voiceType) {
+        OfflineResource offlineResource = null;
+        try {
+            offlineResource = new OfflineResource(this, voiceType);
+        } catch (IOException e) {
+            // IO 错误自行处理
+            e.printStackTrace();
+        }
+        return offlineResource;
     }
 
     /**
      * 朗读监听
      */
-    private class ttsUtteranceListener extends UtteranceProgressListener {
+    private class SpeechSyncListener implements SpeechSynthesizerListener {
+        private static final String TAG = "SpeechSyncListener";
+
+        /**
+         * 播放开始，每句播放开始都会回调
+         *
+         * @param utteranceId utteranceId
+         */
+        @Override
+        public void onSynthesizeStart(String utteranceId) {
+//            sendMessage("准备开始合成,序列号:" + utteranceId);
+        }
+
+        /**
+         * 语音流 16K采样率 16bits编码 单声道 。
+         *
+         * @param utteranceId utteranceId
+         * @param bytes       二进制语音 ，注意可能有空data的情况，可以忽略
+         * @param progress    如合成“百度语音问题”这6个字， progress肯定是从0开始，到6结束。 但progress无法和合成到第几个字对应。
+         */
+        @Override
+        public void onSynthesizeDataArrived(String utteranceId, byte[] bytes, int progress) {
+            //  Log.i(TAG, "合成进度回调, progress：" + progress + ";序列号:" + utteranceId );
+        }
+
+        /**
+         * 合成正常结束，每句合成正常结束都会回调，如果过程中出错，则回调onError，不再回调此接口
+         *
+         * @param utteranceId utteranceId
+         */
+        @Override
+        public void onSynthesizeFinish(String utteranceId) {
+//            sendMessage("合成结束回调, 序列号:" + utteranceId);
+        }
 
         @Override
-        public void onStart(String s) {
+        public void onSpeechStart(String utteranceId) {
+            sendMessage("播放开始回调, 序列号:" + utteranceId);
             updateMediaSessionPlaybackState();
             RxBus.get().post(RxBusTag.READ_ALOUD_START, readAloudNumber + 1);
             RxBus.get().post(RxBusTag.READ_ALOUD_NUMBER, readAloudNumber + 1);
         }
 
+        /**
+         * 播放进度回调接口，分多次回调
+         *
+         * @param utteranceId utteranceId
+         * @param progress    如合成“百度语音问题”这6个字， progress肯定是从0开始，到6结束。 但progress无法保证和合成到第几个字对应。
+         */
         @Override
-        public void onDone(String s) {
+        public void onSpeechProgressChanged(String utteranceId, int progress) {
+            //  Log.i(TAG, "播放进度回调, progress：" + progress + ";序列号:" + utteranceId );
+        }
+
+        /**
+         * 播放正常结束，每句播放正常结束都会回调，如果过程中出错，则回调onError,不再回调此接口
+         *
+         * @param utteranceId utteranceId
+         */
+        @Override
+        public void onSpeechFinish(String utteranceId) {
+            sendMessage("播放结束回调, 序列号:" + utteranceId);
             readAloudNumber = readAloudNumber + contentList.get(nowSpeak).length() + 1;
             nowSpeak = nowSpeak + 1;
             if (nowSpeak >= contentList.size()) {
@@ -716,16 +832,36 @@ public class ReadAloudService extends Service {
             }
         }
 
+        /**
+         * 当合成或者播放过程中出错时回调此接口
+         *
+         * @param utteranceId utteranceId
+         * @param speechError 包含错误码和错误信息
+         */
         @Override
-        public void onError(String s) {
+        public void onError(String utteranceId, SpeechError speechError) {
+            sendErrorMessage("错误发生：" + speechError.description + "，错误编码："
+                    + speechError.code + "，序列号:" + utteranceId);
             pauseReadAloud(true);
             RxBus.get().post(RxBusTag.ALOUD_STATE, Status.PAUSE);
         }
 
-        @Override
-        public void onRangeStart(String utteranceId, int start, int end, int frame) {
-            super.onRangeStart(utteranceId, start, end, frame);
-            RxBus.get().post(RxBusTag.READ_ALOUD_NUMBER, readAloudNumber + start);
+        private void sendErrorMessage(String message) {
+            sendMessage(message, true);
+        }
+
+        private void sendMessage(String message) {
+            sendMessage(message, false);
+        }
+
+        private void sendMessage(String message, boolean isError) {
+            if (BuildConfig.DEBUG) {
+                if (isError) {
+                    Log.e(TAG, message);
+                } else {
+                    Log.i(TAG, message);
+                }
+            }
         }
     }
 

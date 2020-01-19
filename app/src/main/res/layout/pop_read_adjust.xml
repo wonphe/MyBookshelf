@@ -8,15 +8,11 @@
 
     <View style="@style/Style.Shadow.Bottom" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:background="@color/background_menu">
-
-        <View
-            android:id="@+id/vw_bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:background="@color/background_menu"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,6 +88,184 @@
                 android:paddingRight="10dp">
 
                 <LinearLayout
+                    android:id="@+id/ll_tts_SpeechSpeaker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/read_aloud_speaker"
+                        android:textColor="@color/tv_text_default"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+
+                <RadioGroup
+                    android:id="@+id/rgSpeakerGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:button="@null"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_0"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:button="@null"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_1"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:button="@null"
+                        android:checked="true"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_3"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:button="@null"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_4"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_106"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:button="@null"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_106"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_110"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:button="@null"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_110"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_111"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:button="@null"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_111"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_103"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:button="@null"
+                        android:checked="true"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_103"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <top.ox16.yuedu.widget.views.ATERadioNoButton
+                        android:id="@+id/rb_speaker_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
+                        android:includeFontPadding="false"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:singleLine="true"
+                        android:text="@string/aloud_speaker_5"
+                        android:textColor="@color/tv_text_secondary"
+                        android:textSize="13sp" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:background="@color/btn_bg_press" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@color/background_menu"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
                     android:id="@+id/ll_tts_SpeechRate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,23 +283,14 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_tts_SpeechRate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="7dp"
-                        android:layout_marginRight="7dp"
-                        android:text="@string/flow_sys"
+                        android:layout_gravity="center"
+                        android:text="%d"
                         android:textColor="@color/tv_text_default"
-                        android:textSize="14sp" />
-
-                    <top.ox16.yuedu.widget.check_box.SmoothCheckBox
-                        android:id="@+id/scb_tts_follow_sys"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_gravity="center_vertical"
-                        android:clickable="false"
-                        android:contentDescription="@string/flow_sys"
-                        app:duration="150" />
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <top.ox16.yuedu.widget.views.ATESeekBar
@@ -134,7 +299,7 @@
                     android:layout_height="30dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
-                    android:max="45" />
+                    android:max="15" />
 
             </LinearLayout>
 
@@ -143,6 +308,56 @@
                 android:layout_height="0.8dp"
                 android:background="@color/btn_bg_press" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@color/background_menu"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:id="@+id/ll_tts_SpeechPitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/read_aloud_pitch"
+                        android:textColor="@color/tv_text_default"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_tts_SpeechPitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="%d"
+                        android:textColor="@color/tv_text_default"
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <top.ox16.yuedu.widget.views.ATESeekBar
+                    android:id="@+id/hpb_tts_SpeechPitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:max="15" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:background="@color/btn_bg_press" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -191,5 +406,5 @@
             </LinearLayout>
         </LinearLayout>
 
-    </FrameLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -31,6 +31,8 @@ public class ReadBookControl {
     private Bitmap bgBitmap;
     private int screenDirection;
     private int speechRate;
+    private int speechPitch;
+    private int speechSpeaker;
     private boolean speechRateFollowSys;
     private int textSize;
     private int textColor;
@@ -107,7 +109,9 @@ public class ReadBookControl {
         this.fontPath = preferences.getString("fontPath", null);
         this.textConvert = preferences.getInt("textConvertInt", 0);
         this.textBold = preferences.getBoolean("textBold", false);
-        this.speechRate = preferences.getInt("speechRate", 10);
+        this.speechRate = preferences.getInt("speechRate", 5);
+        this.speechPitch = preferences.getInt("speechPitch", 5);
+        this.speechSpeaker = preferences.getInt("speechSpeaker", 2);
         this.speechRateFollowSys = preferences.getBoolean("speechRateFollowSys", true);
         this.showTitle = preferences.getBoolean("showTitle", true);
         this.showTimeBattery = preferences.getBoolean("showTimeBattery", true);
@@ -537,6 +541,28 @@ public class ReadBookControl {
         this.speechRate = speechRate;
         preferences.edit()
                 .putInt("speechRate", speechRate)
+                .apply();
+    }
+
+    public int getSpeechPitch() {
+        return speechPitch;
+    }
+
+    public void setSpeechPitch(int speechPitch) {
+        this.speechPitch = speechPitch;
+        preferences.edit()
+                .putInt("speechPitch", speechPitch)
+                .apply();
+    }
+
+    public int getSpeechSpeaker() {
+        return speechSpeaker;
+    }
+
+    public void setSpeechSpeaker(int speechSpeaker) {
+        this.speechSpeaker = speechSpeaker;
+        preferences.edit()
+                .putInt("speechSpeaker", speechSpeaker)
                 .apply();
     }
 
